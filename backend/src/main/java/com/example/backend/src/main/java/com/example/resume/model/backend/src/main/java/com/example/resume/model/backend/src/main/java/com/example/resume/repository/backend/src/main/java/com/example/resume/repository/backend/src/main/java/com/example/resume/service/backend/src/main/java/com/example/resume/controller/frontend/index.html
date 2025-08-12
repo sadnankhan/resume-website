@@ -3,96 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sample Resume - Homepage</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>User Resume - John Doe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        .user-info div {
+            flex: 1;
+        }
+        .resume {
+            margin-top: 30px;
+        }
+        .resume h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .resume p {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.6;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome to Resume Generator</h1>
 
-        <h2>Sample Resume</h2>
-        <div id="randomResume">
-            <p>Loading random user's resume...</p>
+    <header>
+        <h1>Resume of John Doe</h1>
+    </header>
+
+    <div class="container">
+        <!-- User Info Section -->
+        <div class="user-info">
+            <div>
+                <h2>Personal Information</h2>
+                <p><strong>Name:</strong> John Doe</p>
+                <p><strong>Email:</strong> john.doe@example.com</p>
+                <p><strong>Phone:</strong> (555) 123-4567</p>
+                <p><strong>Location:</strong> New York, NY</p>
+            </div>
         </div>
 
-        <h2>Create Your Resume</h2>
-        <form id="resumeForm">
-            <input type="text" id="firstName" placeholder="First Name" required><br>
-            <input type="text" id="lastName" placeholder="Last Name" required><br>
-            <input type="email" id="email" placeholder="Email" required><br>
-            <input type="text" id="phone" placeholder="Phone" required><br>
-            <input type="text" id="location" placeholder="Location" required><br>
-            <input type="text" id="resumeTitle" placeholder="Resume Title" required><br>
-            <textarea id="resumeData" placeholder="Enter your resume details" required></textarea><br>
-            <button type="submit">Create Resume</button>
-        </form>
+        <!-- Resume Section -->
+        <div class="resume">
+            <h2>Resumes</h2>
 
-        <div id="message"></div>
-        <div id="createdResumes"></div>
+            <!-- Resume 1 -->
+            <div class="resume-item">
+                <h3>Software Engineer</h3>
+                <p><strong>Created On:</strong> July 31, 2025</p>
+                <p><strong>Summary:</strong> Experienced Software Engineer with a passion for coding and problem-solving. Proficient in multiple programming languages including Java, Python, and C++. Skilled in building scalable applications and solving complex technical challenges.</p>
+            </div>
+
+            <!-- Resume 2 -->
+            <div class="resume-item">
+                <h3>Data Scientist</h3>
+                <p><strong>Created On:</strong> July 30, 2025</p>
+                <p><strong>Summary:</strong> Skilled in data analysis, machine learning, and statistical modeling. Experienced with Python, R, and data visualization tools like Tableau. Adept at working with large datasets to derive actionable insights and make data-driven decisions.</p>
+            </div>
+        </div>
     </div>
 
-    <script>
-        function displayRandomResume() {
-            fetch('http://localhost:8080/api/resumes/random')
-                .then(response => response.json())
-                .then(data => {
-                    if (data) {
-                        document.getElementById("randomResume").innerHTML = `
-                            <h3>${data.resumeTitle}</h3>
-                            <p><strong>Created at:</strong> ${new Date(data.createdAt).toLocaleString()}</p>
-                            <p>${data.resumeData}</p>
-                        `;
-                    } else {
-                        document.getElementById("randomResume").innerHTML = "<p>No sample resume found.</p>";
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching random resume:', error);
-                    document.getElementById("randomResume").innerHTML = "<p>Error loading random resume.</p>";
-                });
-        }
+    <footer>
+        <p>© 2025 John Doe - All Rights Reserved</p>
+    </footer>
 
-        displayRandomResume();
-
-        document.getElementById("resumeForm").addEventListener("submit", function(e) {
-            e.preventDefault();
-            const userData = {
-                firstName: document.getElementById("firstName").value,
-                lastName: document.getElementById("lastName").value,
-                email: document.getElementById("email").value,
-                phone: document.getElementById("phone").value,
-                location: document.getElementById("location").value,
-                resumeTitle: document.getElementById("resumeTitle").value,
-                resumeData: document.getElementById("resumeData").value
-            };
-
-            fetch(`http://localhost:8080/api/resumes/1`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(userData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById("message").innerHTML = "Resume created successfully!";
-                displayCreatedResumes();
-            })
-            .catch(error => {
-                document.getElementById("message").innerHTML = "Error creating resume!";
-            });
-        });
-
-        function displayCreatedResumes() {
-            fetch(`http://localhost:8080/api/resumes/1`)
-            .then(response => response.json())
-            .then(data => {
-                let resumes = "<h3>Your Resumes:</h3><ul>";
-                data.forEach(resume => {
-                    resumes += `<li><h4>${resume.resumeTitle}</h4><p>${resume.resumeData.substring(0, 100)}...</p></li>`;
-                });
-                resumes += "</ul>";
-                document.getElementById("createdResumes").innerHTML = resumes;
-            });
-        }
-    </script>
 </body>
 </html>
