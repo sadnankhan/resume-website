@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Resume - Homepage</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Resume Generator</h1>
+
+        <h2>Sample Resume</h2>
+        <div id="randomResume">
+            <p>Loading random user's resume...</p>
+        </div>
+
+        <h2>Create Your Resume</h2>
+        <form id="resumeForm">
+            <input type="text" id="firstName" placeholder="First Name" required><br>
+            <input type="text" id="lastName" placeholder="Last Name" required><br>
+            <input type="email" id="email" placeholder="Email" required><br>
+            <input type="text" id="phone" placeholder="Phone" required><br>
+            <input type="text" id="location" placeholder="Location" required><br>
+            <input type="text" id="resumeTitle" placeholder="Resume Title" required><br>
+            <textarea id="resumeData" placeholder="Enter your resume details" required></textarea><br>
+            <button type="submit">Create Resume</button>
+        </form>
+
+        <div id="message"></div>
+        <div id="createdResumes"></div>
+    </div>
+
+    <script>
+        function displayRandomResume() {
+            fetch('http://localhost:8080/api/resumes/random')
+                .then(response => response.json())
+                .then(data => {
+                    if (data) {
+                        document.getElementById("randomResume").innerHTML = `
+                            <h3>${data.resumeTitle}</h3>
+                            <p><strong>Created at:</strong> ${new Date(data.createdAt).toLocaleString()}</p>
+                            <p>${data.resumeData}</p>
+                        `;
+                    } else {
+                        document.getElementById("randomResume").innerHTML = "<p>No sample resume found.</p>";
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching random resume:', error);
+                    document.getElementById("randomResume").innerHTML = "<p>Error loading random resume.</p>";
+                });
+        }
+
+        displayRandomResume();
+
+        document.getElementById("resumeForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const userData = {
+                firstName: document.getElementById("firstName").value,
+                lastName: document.getElementById("lastName").value,
+                email: document.getElementById("email").value,
+                phone: document.getElementById("phone").value,
+                location: document.getElementById("location").value,
+                resumeTitle: document.getElementById("resumeTitle").value,
+                resumeData: document.getElementById("resumeData").value
+            };
+
+            fetch(`http://localhost:8080/api/resumes/1`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(userData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("message").innerHTML = "Resume created successfully!";
+                displayCreatedResumes();
+            })
+            .catch(error => {
+                document.getElementById("message").innerHTML = "Error creating resume!";
+            });
+        });
+
+        function displayCreatedResumes() {
+            fetch(`http://localhost:8080/api/resumes/1`)
+            .then(response => response.json())
+            .then(data => {
+                let resumes = "<h3>Your Resumes:</h3><ul>";
+                data.forEach(resume => {
+                    resumes += `<li><h4>${resume.resumeTitle}</h4><p>${resume.resumeData.substring(0, 100)}...</p></li>`;
+                });
+                resumes += "</ul>";
+                document.getElementById("createdResumes").innerHTML = resumes;
+            });
+        }
+    </script>
+</body>
+</html>
