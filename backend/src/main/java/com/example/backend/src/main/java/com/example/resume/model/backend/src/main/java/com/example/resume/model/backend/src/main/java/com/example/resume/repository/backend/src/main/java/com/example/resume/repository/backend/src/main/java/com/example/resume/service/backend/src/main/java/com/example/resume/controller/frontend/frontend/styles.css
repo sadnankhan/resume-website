@@ -1,0 +1,93 @@
+/* Styles specifically tuned for producing a clean A4 PDF export */
+
+/* A4 page setup for printing */
+@page {
+  size: A4;
+  margin: 20mm;
+}
+
+/* Base document styles */
+html, body {
+  height: 100%;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 11pt; /* good default for PDF */
+  color: #111;
+  background: #fff; /* ensure white background for PDF */
+  -webkit-print-color-adjust: exact;
+}
+
+/* Container width tuned for PDF readability */
+.container {
+  width: 170mm; /* A4 printable width minus margins */
+  max-width: 170mm;
+  margin: 0 auto;
+  padding: 0;
+}
+
+/* Page header / title */
+h1 {
+  font-size: 20pt;
+  margin: 0 0 6pt 0;
+  font-weight: 700;
+  text-align: left;
+}
+
+h2 {
+  font-size: 13pt;
+  margin: 10pt 0 6pt 0;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 4pt;
+}
+
+h3 { font-size: 12pt; margin: 8pt 0 4pt 0; }
+h4 { font-size: 11pt; margin: 6pt 0; }
+
+/* Contact / meta area (single-line compact) */
+.contact-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 10pt;
+  margin-bottom: 8pt;
+}
+
+/* Main resume text */
+#randomResume p, .resume p, .resume-item p {
+  line-height: 1.25;
+  margin: 4pt 0;
+}
+
+/* Form controls hidden when printing — we only want resume content in the PDF */
+@media print {
+  form, #message, #createdResumes, button, input, textarea {
+    display: none !important;
+  }
+
+  /* Make the random resume take the full page width */
+  .container { width: auto; }
+
+  /* Prevent awkward breaks inside resume items */
+  .resume-item, #randomResume, .resume {
+    page-break-inside: avoid;
+  }
+}
+
+/* Page-break utilities */
+.page-break { page-break-after: always; }
+
+/* Subtle typographic polish for PDF */
+ul { margin: 4pt 0 8pt 18pt; }
+li { margin-bottom: 4pt; }
+
+/* Sections layout for two-column experience/education (if used) */
+.sections {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12pt;
+}
+
+/* Ensure long lines wrap nicely */
+p, li { word-break: break-word; }
+
+/* Small print for footers */
+footer { font-size: 9pt; color: #666; text-align: center; margin-top: 12pt; }
