@@ -1,0 +1,17 @@
+resume-github-repo/
+├─ README.md
+├─ schema.sql
+├─ frontend/
+│  ├─ index.html
+│  ├─ styles.css
+│  └─ random_user.html
+└─ backend/
+   └─ src/main/java/com/example/resume/
+      ├─ ResumeApplication.java
+      ├─ model/User.java
+      ├─ model/Resume.java
+      ├─ repository/UserRepository.java
+      ├─ repository/ResumeRepository.java
+      ├─ service/ResumeService.java
+      └─ controller/ResumeController.java
+   └─ src/main/resources/application.properties
